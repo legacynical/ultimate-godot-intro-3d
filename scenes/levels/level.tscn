@@ -1,0 +1,65 @@
+[gd_scene load_steps=11 format=3 uid="uid://dnnftwfghbvdw"]
+
+[ext_resource type="Texture2D" uid="uid://pmtjsr8lh0iy" path="res://graphics/grid/Light/texture_06.png" id="1_yd6dp"]
+[ext_resource type="Texture2D" uid="uid://dpweq38ut7cfs" path="res://icon.svg" id="2_rwof7"]
+[ext_resource type="Script" path="res://scenes/levels/mesh_instance_3d_2.gd" id="3_w5b3t"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_s8dhv"]
+sky_top_color = Color(0.254595, 0.615692, 0.753943, 1)
+sky_horizon_color = Color(0.613649, 0.696173, 0.721736, 1)
+ground_horizon_color = Color(0.613649, 0.696173, 0.721736, 1)
+
+[sub_resource type="Sky" id="Sky_sa6al"]
+sky_material = SubResource("ProceduralSkyMaterial_s8dhv")
+
+[sub_resource type="Environment" id="Environment_ghd03"]
+background_mode = 2
+sky = SubResource("Sky_sa6al")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mjg7m"]
+albedo_color = Color(0.533333, 1, 1, 1)
+albedo_texture = ExtResource("1_yd6dp")
+
+[sub_resource type="BoxMesh" id="BoxMesh_r3tf4"]
+material = SubResource("StandardMaterial3D_mjg7m")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6ca1c"]
+albedo_color = Color(1, 0.17, 0.17, 1)
+
+[sub_resource type="TorusMesh" id="TorusMesh_2t3de"]
+material = SubResource("StandardMaterial3D_6ca1c")
+
+[node name="Level" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_ghd03")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.300706, -0.579265, 0.757647, 0, 0.794415, 0.607376, -0.953717, 0.182641, -0.238885, 0, 0, 0)
+shadow_enabled = true
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.45812, 0, 0)
+visible = false
+mesh = SubResource("BoxMesh_r3tf4")
+
+[node name="CSGSphere3D" type="CSGSphere3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.14382, 0, 0)
+visible = false
+radius = 1.07
+radial_segments = 45
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.05886, 0, 0)
+visible = false
+texture = ExtResource("2_rwof7")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.0102, 0.968155, 0)
+mesh = SubResource("TorusMesh_2t3de")
+script = ExtResource("3_w5b3t")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(0.9999, 0.00618969, -0.0126901, -4.22072e-08, 0.898786, 0.438387, 0.0141192, -0.438343, 0.898697, -0.254434, 2.97059, 5.92425)
