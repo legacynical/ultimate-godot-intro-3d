@@ -28,7 +28,6 @@ func _input(event):
 		print("Joypad ", event.device,"  Button Pressed: ", event.button_index, " Pressed: ", str(event.pressed))
 
 func _physics_process(delta: float) -> void:
-	#velocity = Vector3(movement_input.x, 0, movement_input.y) * base_speed
 	move_logic(delta)
 	jump_logic(delta)
 	move_and_slide()
