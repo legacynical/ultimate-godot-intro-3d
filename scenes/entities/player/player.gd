@@ -2,8 +2,23 @@ extends CharacterBody3D
 
 @export var base_speed := 4.0
 @export var camera: Node3D
+@export var controller_index: int = 0
 
 var movement_input := Vector2.ZERO
+
+func _ready() -> void:
+	var connected_devices = Input.get_connected_joypads()
+	if connected_devices.is_empty():
+		print("No controllers detected.")
+	else:
+		print("Connected controllers: ", connected_devices)
+		print("Using controller index: ", controller_index)
+
+func _input(event):
+	if event is InputEventJoypadMotion:
+		print("Joypad Motion Detected:", event.axis, "Value:", event.axis_value)
+	elif event is InputEventJoypadButton:
+		print("Joypad Button Pressed:", event.button_index, "Pressed:", event.pressed)
 
 func _physics_process(_delta: float) -> void:
 	movement_input = Input.get_vector("left", "right", "forward", "backward").rotated(-camera.global_rotation.y)
