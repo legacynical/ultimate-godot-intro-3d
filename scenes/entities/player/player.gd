@@ -11,7 +11,7 @@ extends CharacterBody3D
 @export var base_speed := 4.0
 @export var camera: Node3D
 
-var movement_input := Vector2.ZERO
+var movement_input := Vector2.ZERO # Vector2(0, 0)
 
 func _ready() -> void:
 	var connected_devices = Input.get_connected_joypads()
@@ -27,18 +27,35 @@ func _input(event):
 		print("Joypad ", event.device,"  Button Pressed: ", event.button_index, " Pressed: ", str(event.pressed))
 
 func _physics_process(delta: float) -> void:
-	movement_input = Input.get_vector("left", "right", "forward", "backward").rotated(-camera.global_rotation.y)
 	#velocity = Vector3(movement_input.x, 0, movement_input.y) * base_speed
+	move_logic(delta)
+	jump_logic(delta)
+	move_and_slide()
+
+func move_logic(delta) -> void:
+	movement_input = Input.get_vector("left", "right", "forward", "backward").rotated(-camera.global_rotation.y)
+	var vel_2d = Vector2(velocity.x, velocity.z)
 	
-	if Input.is_action_just_pressed("jump"):
-		velocity.y = -jump_velocity
+	if movement_input != Vector2.ZERO: # if there is movement input vector, accelerate to base_speed
+		vel_2d += movement_input * base_speed * delta
+		vel_2d = vel_2d.limit_length(base_speed)
+		velocity.x = vel_2d.x
+		velocity.z = vel_2d.y
+	else: # if no movement input, decelerate to zero vector
+		vel_2d = vel_2d.move_toward(Vector2.ZERO, base_speed * 4.0 * delta)
+		velocity.x = vel_2d.x
+		velocity.z = vel_2d.y
+		
+func jump_logic(delta) -> void:
+	# for better UX, add a grace buffer for jump inputs made close to floor instead of a strict check
+	# should input handling be done before or after is_on_floor() check?
+	# how should exploits be mitigated? (jump spam, early jumps, etc.) how do other games handle this and also
+	# implement other movement mechanics?
+	if is_on_floor(): 
+		if Input.is_action_just_pressed("jump"):
+			velocity.y = -jump_velocity
 	var gravity = jump_gravity if velocity.y > 0.0 else fall_gravity
 	velocity.y -= gravity * delta
-	
-	move_and_slide()
-	
-	#print(camera.global_rotation.y)
-	#print("movement input vector: ", movement_input)
 		
 #region default template (commented)
 #const SPEED = 5.0
