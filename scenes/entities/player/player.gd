@@ -9,6 +9,7 @@ extends CharacterBody3D
 @onready var fall_gravity: float = ((-2.0 * jump_height) / (jump_time_to_descent * jump_time_to_descent)) * -1.0
 
 @export var base_speed := 4.0
+@export var run_speed := 6.0
 @export var camera: Node3D
 
 var movement_input := Vector2.ZERO # Vector2(0, 0)
@@ -37,8 +38,9 @@ func move_logic(delta) -> void:
 	var vel_2d = Vector2(velocity.x, velocity.z)
 	
 	if movement_input != Vector2.ZERO: # if there is movement input vector, accelerate to base_speed
-		vel_2d += movement_input * base_speed * delta
-		vel_2d = vel_2d.limit_length(base_speed)
+		var speed = run_speed if Input.is_action_pressed("run") else base_speed
+		vel_2d += movement_input * speed * delta
+		vel_2d = vel_2d.limit_length(speed)
 		velocity.x = vel_2d.x
 		velocity.z = vel_2d.y
 	else: # if no movement input, decelerate to zero vector
