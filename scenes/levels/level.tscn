@@ -1,8 +1,9 @@
-[gd_scene load_steps=14 format=3 uid="uid://dnnftwfghbvdw"]
+[gd_scene load_steps=15 format=3 uid="uid://dnnftwfghbvdw"]
 
 [ext_resource type="PackedScene" uid="uid://cec7f6jwig13o" path="res://scenes/entities/player/player.tscn" id="1_e8qde"]
 [ext_resource type="Texture2D" uid="uid://pmtjsr8lh0iy" path="res://graphics/grid/Light/texture_06.png" id="1_yd6dp"]
 [ext_resource type="Texture2D" uid="uid://dpweq38ut7cfs" path="res://icon.svg" id="2_rwof7"]
+[ext_resource type="Script" path="res://scenes/levels/debug.gd" id="4_6e16t"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_s8dhv"]
 sky_top_color = Color(0.254595, 0.615692, 0.753943, 1)
@@ -114,3 +115,17 @@ visible = false
 mesh = SubResource("TorusMesh_2t3de")
 skeleton = NodePath("../..")
 script = SubResource("GDScript_ixpuh")
+
+[node name="Debug" type="Control" parent="." node_paths=PackedStringArray("player", "player_speed")]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("4_6e16t")
+player = NodePath("../Entities/Player")
+player_speed = NodePath("PlayerSpeed")
+
+[node name="PlayerSpeed" type="Label" parent="Debug"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
