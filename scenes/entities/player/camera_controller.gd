@@ -5,7 +5,7 @@ extends Node3D
 @export var horizontal_acceleration := 2.0
 @export var vertical_acceleration := 1.0
 @export var mouse_acceleration := 0.005
-@export var joy_stick_control: bool
+@export var camera_joy_stick: bool
 
 # note: there can be glitchy camera movement if both _process() (which handles joystick input) and 
 # _input() (which handles mouse input) are active. This can be mitigated by activating one at a
@@ -13,13 +13,13 @@ extends Node3D
 # both active for now for testing purposes
 
 func _process(delta: float) -> void:
-	if joy_stick_control:
+	if camera_joy_stick:
 		var joy_dir = Input.get_vector("pan_left", "pan_right", "pan_up", "pan_down")
 		rotate_from_vector(joy_dir * delta * Vector2(horizontal_acceleration, vertical_acceleration))
 		#print(joy_dir)
 
 func _input(event: InputEvent) -> void:
-	if not joy_stick_control:
+	if not camera_joy_stick:
 		if event is InputEventMouseMotion:
 			rotate_from_vector(event.relative * mouse_acceleration)
 			#print("mouse movement: ", event.relative)
